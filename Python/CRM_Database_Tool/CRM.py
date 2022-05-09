@@ -2,6 +2,7 @@ from tkinter import *
 from PIL import ImageTk,Image
 import mysql.connector #Import the MYSQL module
 import csv
+from tkinter import ttk #For the drop menu usage
 
 
 root = Tk()
@@ -131,8 +132,20 @@ def search_customer():
 	search_customers.geometry("800x600") #Define the gemoetry of the window
 
 	def search_now():
+		selected = drop.get()
+		if selected == "Search by...":
+			test = Label(search_customers,text="You forgot to select from the drop menu")
+			test.grid(row=2,column=0)
+		if selected == "Last Name":
+			sql = "SELECT * FROM customers WHERE last_name = %s"
+		if selected == "Email Adress":
+			sql = "SELECT * FROM customers WHERE email = %s"
+		if selected == "Customer ID":
+			sql = "SELECT * FROM customers WHERE user_id = %s"
+
+		
 		searched = search_box.get()
-		sql = "SELECT * FROM customers WHERE last_name = %s"
+		#sql = "SELECT * FROM customers WHERE last_name = %s"
 		name = (searched, )
 		result = my_cursor.execute(sql,name)
 		result = my_cursor.fetchall()
@@ -141,18 +154,24 @@ def search_customer():
 				result ='Record not found....'
 
 		searched_label = Label(search_customers, text=result)
-		searched_label.grid(row=2,column=0,padx=10,pady=10)
+		searched_label.grid(row=3,column=0,padx=10,pady=10)
+		
+
 
 	#create a box for search for customer
 	search_box= Entry(search_customers)
 	search_box.grid(row=0,column=1,padx=10,pady=10)
 	#create a box for search label
-	search_box_label= Label(search_customers,text="Search Customer by Last Name")
+	search_box_label= Label(search_customers,text="Search Customer")
 	search_box_label.grid(row=0,column=0,padx=10,pady=10)
 	#create a button for search for customer
 	search_button= Button(search_customers,text="Search Customers",command=search_now)
 	search_button.grid(row=1,column=0,padx=10,pady=10)
 
+	#Create the drop menu search box
+	drop = ttk.Combobox(search_customers,value=["Search by...","Last Name","Email Adress", "Customer ID"])
+	drop.current(0)
+	drop.grid(row=0,column=2)
 
 #Create a label
 title_label = Label(root,text="Codemy Customers Database",font=("Helvetica",16))
