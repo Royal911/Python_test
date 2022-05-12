@@ -6,7 +6,7 @@ import json  #Import json objects
 
 root = Tk()
 root.title('Learn to code')
-root.iconbitmap("C:/Users/plantadmin_HS_CM/test/Python/images/test.ico")
+root.iconbitmap("images/main.ico")
 root.geometry("430x200")
 
 
